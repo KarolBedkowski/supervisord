@@ -355,6 +355,7 @@ func (x *CtlCommand) inProcessMap(procInfo *types.ProcessInfo, processesMap map[
 }
 
 func (x *CtlCommand) getANSIColor(statename string) string {
+	statename = strings.ToUpper(statename)
 	if statename == "RUNNING" {
 		// green
 		return "\x1b[0;32m"
