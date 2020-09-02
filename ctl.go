@@ -17,6 +17,7 @@ type CtlCommand struct {
 	User      string `short:"u" long:"user" description:"the user name"`
 	Password  string `short:"P" long:"password" description:"the password"`
 	Verbose   bool   `short:"v" long:"verbose" description:"Show verbose debug information"`
+	NoColors  bool   `long:"no-colors" description:"Disable output coloring"`
 }
 
 // StatusCommand get the status of all supervisor managed programs
@@ -327,7 +328,11 @@ func (x *CtlCommand) showProcessInfo(reply *xmlrpcclient.AllProcessInfoReply, pr
 			if !x.showGroupName() {
 				processName = pinfo.Name
 			}
-			fmt.Printf("%s%-33s%-10s%s%s\n", x.getANSIColor(pinfo.Statename), processName, pinfo.Statename, description, "\x1b[0m")
+			if x.NoColors {
+				fmt.Printf("%-33s%-10s%s\n", processName, pinfo.Statename, description)
+			} else {
+				fmt.Printf("%-33s%s%-10s%s%s\n", processName, x.getANSIColor(pinfo.Statename), pinfo.Statename, "\x1b[0m", description)
+			}
 		}
 	}
 }
